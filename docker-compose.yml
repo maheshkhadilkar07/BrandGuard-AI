@@ -1,0 +1,30 @@
+# Runs PostgreSQL only (for local development):   docker compose up -d db
+# Or the whole app (API + built frontend + database):  set SECRET_KEY, then  docker compose up --build
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: brandguard
+      POSTGRES_PASSWORD: brandguard
+      POSTGRES_DB: brandguard
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U brandguard"]
+      interval: 5s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY in your shell or a .env file next to docker-compose.yml}
+      DATABASE_URL: postgresql+psycopg://brandguard:brandguard@db:5432/brandguard
+      CORS_ORIGINS: http://localhost:8000
+    ports: ["8000:8000"]
+    volumes: ["uploads:/srv/backend/uploads"]
+
+volumes:
+  pgdata:
+  uploads:

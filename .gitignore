@@ -1,0 +1,24 @@
+# secrets and local config
+.env
+*.env.local
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+*.db
+# uploads (keep the folder, not the files)
+backend/uploads/*
+!backend/uploads/.gitkeep
+# node
+frontend/node_modules/
+frontend/dist/
+# editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# log files
+*.log
