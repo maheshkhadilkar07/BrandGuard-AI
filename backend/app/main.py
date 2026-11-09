@@ -27,9 +27,12 @@ for r in (auth.router, organisation.router, users.router, *rules.routers, conten
     api.include_router(r)
 
 
-@api.get("/health", tags=["System"])
+@api.api_route("/health", methods=["GET", "HEAD"], tags=["System"])
 def health():
-    return {"status": "ok", "ai_layer": "enabled" if settings.llm_enabled else "off (rule engine only)"}
+    return {
+        "status": "ok",
+        "ai_layer": "enabled" if settings.llm_enabled else "off (rule engine only)"
+    }
 
 
 app.include_router(api)
